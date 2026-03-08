@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfraCorps | Cloud & DevOps Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #3b82f6, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-gray-100 font-sans">
+
+    <nav class="flex items-center justify-between px-10 py-6 sticky top-0 bg-[#0f172a]/80 backdrop-blur-md z-50">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-orange-500 rounded-lg flex items-center justify-center font-bold text-xl">IC</div>
+            <span class="text-2xl font-bold tracking-tight">INFRA<span class="text-orange-500">CORPS</span></span>
+        </div>
+        <div class="hidden md:flex space-x-8 font-medium">
+            <a href="#" class="hover:text-blue-400 transition">Services</a>
+            <a href="#" class="hover:text-blue-400 transition">Projects</a>
+            <a href="#" class="hover:text-blue-400 transition">About</a>
+            <a href="#" class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full transition shadow-lg">Get Started</a>
+        </div>
+    </nav>
+
+    <header class="relative px-10 py-24 flex flex-col items-center text-center">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px] -z-10"></div>
+        <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+            Automating <span class="text-gradient">Infrastructure</span> <br>Beyond Limits
+        </h1>
+        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mb-10">
+            Scaling your cloud ecosystem with precision. InfraCorps provides elite DevOps solutions, CI/CD automation, and secure healthcare infrastructure management.
+        </p>
+        <div class="flex space-x-4">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-bold transition">View Solutions</button>
+            <button class="border border-gray-600 hover:border-orange-500 px-8 py-4 rounded-lg font-bold transition">Case Studies</button>
+        </div>
+    </header>
+
+    <section class="px-10 py-20 bg-[#111827]">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+            <div class="glass-card p-8 rounded-2xl hover:scale-105 transition-transform">
+                <div class="text-blue-500 text-3xl mb-4"><i class="fas fa-cloud"></i></div>
+                <h3 class="text-xl font-bold mb-3">Cloud Migration</h3>
+                <p class="text-gray-400">Seamlessly transitioning legacy systems to AWS and hybrid environments with zero downtime.</p>
+            </div>
+            <div class="glass-card p-8 rounded-2xl hover:scale-105 transition-transform border-b-4 border-orange-500">
+                <div class="text-orange-500 text-3xl mb-4"><i class="fas fa-infinity"></i></div>
+                <h3 class="text-xl font-bold mb-3">DevOps Pipeline</h3>
+                <p class="text-gray-400">Implementing robust CI/CD using GitHub Actions, Docker, and Kubernetes for rapid delivery.</p>
+            </div>
+            <div class="glass-card p-8 rounded-2xl hover:scale-105 transition-transform">
+                <div class="text-blue-500 text-3xl mb-4"><i class="fas fa-shield-alt"></i></div>
+                <h3 class="text-xl font-bold mb-3">Security & Compliance</h3>
+                <p class="text-gray-400">Specializing in healthcare-grade security (Helios Project) and automated compliance auditing.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="px-10 py-16 text-center border-t border-gray-800">
+        <p class="text-gray-500 mb-6 uppercase tracking-widest text-sm">Powered by modern tech</p>
+        <div class="flex justify-center space-x-10 text-3xl text-gray-600 opacity-50 grayscale hover:grayscale-0 transition mb-10">
+            <i class="fab fa-aws"></i>
+            <i class="fab fa-docker"></i>
+            <i class="fab fa-github"></i>
+            <i class="fab fa-react"></i>
+        </div>
+        <div class="text-gray-400">
+            &copy; 2026 InfraCorps. Built by Karthik Hegadi.
+        </div>
+    </footer>
+
+</body>
+</html>
