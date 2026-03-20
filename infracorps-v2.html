@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfraCorps | Cloud & DevOps Solutions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --navy:        #0b1120;
+      --navy-mid:    #0f172a;
+      --navy-card:   #111827;
+      --navy-lift:   #1a2438;
+      --blue:        #3b82f6;
+      --blue-dim:    rgba(59,130,246,.12);
+      --orange:      #f97316;
+      --orange-dim:  rgba(249,115,22,.10);
+      --text:        #e2e8f0;
+      --muted:       #64748b;
+      --border:      rgba(255,255,255,.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    h1,h2,h3,h4,.font-display { font-family: 'Syne', sans-serif; }
+    .mono { font-family: 'Space Mono', monospace; }
+
+    /* ── GLASS ── */
+    .glass {
+      background: rgba(255,255,255,.03);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border);
+    }
+    .glass-lift {
+      background: rgba(26,36,56,.6);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border);
+    }
+
+    /* ── GRADIENT TEXT ── */
+    .grad { background: linear-gradient(100deg,#3b82f6 20%,#f97316 80%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .grad-blue { background: linear-gradient(100deg,#60a5fa,#3b82f6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* ── GLOW ORBS ── */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-blue   { background: rgba(59,130,246,.14); }
+    .orb-orange { background: rgba(249,115,22,.09); }
+
+    /* ── SCROLL PROGRESS ── */
+    #scroll-bar {
+      position: fixed; top:0; left:0; height:2px; z-index:9999;
+      background: linear-gradient(90deg,#3b82f6,#f97316);
+      width: 0%; transition: width .08s linear;
+    }
+
+    /* ── NAV ── */
+    #main-nav {
+      position: sticky; top:0; z-index:500;
+      background: rgba(11,17,32,.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow .3s;
+    }
+    #main-nav.scrolled { box-shadow: 0 4px 40px rgba(0,0,0,.4); }
+    .nav-link {
+      cursor: pointer; font-size:.875rem; font-weight:500;
+      color: var(--muted); transition: color .2s;
+      position: relative;
+    }
+    .nav-link::after {
+      content:''; position:absolute; bottom:-4px; left:0; right:0;
+      height:1.5px; background: var(--blue);
+      transform: scaleX(0); transition: transform .25s;
+    }
+    .nav-link:hover { color: var(--text); }
+    .nav-link:hover::after, .nav-link.active-link::after { transform: scaleX(1); }
+    .nav-link.active-link { color: #fff; }
+
+    /* ── MOBILE MENU ── */
+    #mob-menu {
+      max-height: 0; overflow: hidden; opacity: 0;
+      transition: max-height .4s cubic-bezier(.4,0,.2,1), opacity .3s;
+    }
+    #mob-menu.open { max-height: 420px; opacity: 1; }
+    #hb span {
+      display:block; width:22px; height:2px;
+      background:#94a3b8; border-radius:2px;
+      transition: transform .3s, opacity .2s;
+    }
+
+    /* ── PAGE SYSTEM ── */
+    .page { display:none; animation: pagein .45s ease both; }
+    .page.active { display:block; }
+    @keyframes pagein { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── HERO ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes float {
+      0%,100% { transform:translateY(0px) rotate(0deg); }
+      50%      { transform:translateY(-12px) rotate(1deg); }
+    }
+    @keyframes ticker {
+      0%   { transform:translateX(0); }
+      100% { transform:translateX(-50%); }
+    }
+    @keyframes orb-drift {
+      0%,100% { transform:translate(0,0) scale(1); }
+      33%      { transform:translate(30px,-20px) scale(1.05); }
+      66%      { transform:translate(-20px,15px) scale(.97); }
+    }
+    @keyframes typewrite {
+      from { width:0; } to { width:100%; }
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes countUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes scanline {
+      0%   { top:-4%; }
+      100% { top:104%; }
+    }
+
+    .fu1 { animation: fadeUp .6s .05s ease both; }
+    .fu2 { animation: fadeUp .6s .18s ease both; }
+    .fu3 { animation: fadeUp .6s .32s ease both; }
+    .fu4 { animation: fadeUp .6s .46s ease both; }
+    .fu5 { animation: fadeUp .6s .60s ease both; }
+
+    .float { animation: float 5s ease-in-out infinite; }
+    .orb-anim { animation: orb-drift 12s ease-in-out infinite; }
+
+    /* ── HERO GRID BG ── */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(59,130,246,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,130,246,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* ── HERO TERMINAL ── */
+    .terminal {
+      background: #0d1117; border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,.5);
+    }
+    .terminal-bar {
+      background: #161b22; padding:.65rem 1rem;
+      display:flex; align-items:center; gap:.5rem;
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .terminal-dot { width:12px; height:12px; border-radius:50%; }
+    .terminal-body { padding:1.25rem 1.25rem; font-family:'Space Mono',monospace; font-size:.78rem; line-height:1.8; color:#e2e8f0; }
+    .t-green  { color:#4ade80; }
+    .t-blue   { color:#60a5fa; }
+    .t-orange { color:#fb923c; }
+    .t-muted  { color:#475569; }
+    .t-cursor { display:inline-block; width:8px; height:14px; background:#60a5fa; vertical-align:middle; animation:blink 1s infinite; margin-left:2px; }
+
+    /* ── CARDS ── */
+    .card {
+      transition: transform .28s cubic-bezier(.4,0,.2,1), box-shadow .28s;
+      border: 1px solid var(--border);
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 24px 60px rgba(0,0,0,.4), 0 0 0 1px rgba(59,130,246,.12);
+    }
+
+    /* ── STAT ── */
+    .stat-num { font-family:'Syne',sans-serif; }
+
+    /* ── SKILL BAR ── */
+    .skill-fill {
+      height:100%; border-radius:999px;
+      transition: width 1.4s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── FAQ ── */
+    .faq-body { max-height:0; overflow:hidden; transition: max-height .38s cubic-bezier(.4,0,.2,1); }
+    .faq-body.open { max-height:300px; }
+    .faq-chevron { transition: transform .3s; }
+    .faq-open .faq-chevron { transform: rotate(180deg); }
+
+    /* ── BADGE ── */
+    .badge {
+      display:inline-flex; align-items:center; gap:.35rem;
+      font-size:.7rem; font-weight:600; letter-spacing:.04em;
+      padding:.25rem .75rem; border-radius:999px;
+      border:1px solid; font-family:'Space Mono',monospace;
+    }
+    .badge-blue   { color:#60a5fa; border-color:rgba(96,165,250,.25); background:rgba(59,130,246,.08); }
+    .badge-orange { color:#fb923c; border-color:rgba(251,146,60,.25); background:rgba(249,115,22,.08); }
+    .badge-green  { color:#4ade80; border-color:rgba(74,222,128,.25); background:rgba(74,222,128,.08); }
+    .badge-gray   { color:#94a3b8; border-color:rgba(148,163,184,.2); background:rgba(148,163,184,.05); }
+
+    /* ── LABS CARD ── */
+    .lab-card { position:relative; overflow:hidden; }
+    .lab-card::before {
+      content:''; position:absolute; inset:0; opacity:0;
+      background: linear-gradient(135deg,rgba(59,130,246,.06),rgba(249,115,22,.04));
+      transition: opacity .3s;
+    }
+    .lab-card:hover::before { opacity:1; }
+
+    /* ── TICKER ── */
+    .ticker-track { display:flex; width:max-content; animation: ticker 28s linear infinite; }
+    .ticker-track:hover { animation-play-state:paused; }
+
+    /* ── SERVICE ICON RING ── */
+    .svc-icon-wrap {
+      position:relative; display:inline-flex;
+      align-items:center; justify-content:center;
+    }
+    .svc-icon-wrap::before {
+      content:''; position:absolute; inset:-6px;
+      border-radius:16px; border:1px solid rgba(59,130,246,.2);
+      opacity:0; transition:opacity .3s;
+    }
+    .card:hover .svc-icon-wrap::before { opacity:1; }
+
+    /* ── BTN ── */
+    .btn-primary {
+      background: linear-gradient(130deg,#3b82f6,#2563eb);
+      color:#fff; font-weight:600; border-radius:10px;
+      transition: transform .2s, box-shadow .2s, filter .2s;
+      border:none; cursor:pointer;
+    }
+    .btn-primary:hover {
+      transform:translateY(-2px);
+      box-shadow:0 12px 32px rgba(59,130,246,.35);
+      filter:brightness(1.08);
+    }
+    .btn-ghost {
+      background:transparent;
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text); font-weight:500; border-radius:10px;
+      transition: border-color .2s, background .2s;
+      cursor:pointer;
+    }
+    .btn-ghost:hover { border-color: var(--orange); background:rgba(249,115,22,.06); }
+
+    /* ── BACK TO TOP ── */
+    #btt {
+      position:fixed; bottom:1.75rem; right:1.75rem; z-index:400;
+      width:42px; height:42px; border-radius:50%;
+      background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transform:translateY(8px);
+      transition:opacity .3s, transform .3s;
+      box-shadow:0 8px 24px rgba(59,130,246,.35);
+      cursor:pointer; border:none;
+    }
+    #btt.show { opacity:1; pointer-events:auto; transform:translateY(0); }
+
+    /* ── INTERSECTION OBSERVER REVEALS ── */
+    .reveal { opacity:0; transform:translateY(24px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-d1 { transition-delay:.08s; }
+    .reveal-d2 { transition-delay:.18s; }
+    .reveal-d3 { transition-delay:.28s; }
+    .reveal-d4 { transition-delay:.38s; }
+
+    /* Input */
+    input, textarea, select {
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.09);
+      color:var(--text); border-radius:10px;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    input:focus,textarea:focus,select:focus {
+      outline:none; border-color:var(--blue);
+      box-shadow:0 0 0 3px rgba(59,130,246,.12);
+    }
+    input::placeholder,textarea::placeholder { color:#334155; }
+    select option { background:#111827; }
+  </style>
+</head>
+<body>
+
+<!-- Scroll bar -->
+<div id="scroll-bar"></div>
+<!-- Back to top -->
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fas fa-arrow-up text-white text-xs"></i>
+</button>
+
+<!-- ══════════════════════════════
+  NAV
+══════════════════════════════ -->
+<nav id="main-nav">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <div class="flex items-center gap-3 cursor-pointer select-none" onclick="goPage('home')">
+      <div class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm"
+           style="background:linear-gradient(135deg,#3b82f6,#f97316);font-family:Syne,sans-serif">IC</div>
+      <span style="font-family:Syne,sans-serif;font-weight:800;letter-spacing:-.02em">
+        INFRA<span style="color:#f97316">CORPS</span>
+      </span>
+    </div>
+
+    <!-- Desktop -->
+    <div class="hidden md:flex items-center gap-7">
+      <span class="nav-link" data-page="home"    onclick="goPage('home')">Home</span>
+      <span class="nav-link" data-page="services" onclick="goPage('services')">Services</span>
+      <span class="nav-link" data-page="labs"    onclick="goPage('labs')">Labs</span>
+      <span class="nav-link" data-page="about"   onclick="goPage('about')">About</span>
+      <button class="btn-primary px-5 py-2.5 text-sm" onclick="goPage('contact')">Get Started</button>
+    </div>
+
+    <!-- Hamburger -->
+    <button id="hb" class="md:hidden flex flex-col gap-1.5 p-1" onclick="toggleMob()" aria-label="Menu">
+      <span id="hb1"></span>
+      <span id="hb2"></span>
+      <span id="hb3"></span>
+    </button>
+  </div>
+
+  <!-- Mobile drop -->
+  <div id="mob-menu" class="md:hidden border-t border-white/5">
+    <div class="px-6 py-5 flex flex-col gap-4 text-sm font-medium">
+      <span class="nav-link" onclick="goPage('home');toggleMob()">Home</span>
+      <span class="nav-link" onclick="goPage('services');toggleMob()">Services</span>
+      <span class="nav-link" onclick="goPage('labs');toggleMob()">Labs</span>
+      <span class="nav-link" onclick="goPage('about');toggleMob()">About</span>
+      <span class="nav-link text-blue-400" onclick="goPage('contact');toggleMob()">Get Started →</span>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════
+  PAGE: HOME
+══════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- ── HERO ── -->
+  <section class="relative overflow-hidden grid-bg min-h-screen flex items-center">
+    <!-- orbs -->
+    <div class="orb orb-blue  w-[700px] h-[700px] top-[-200px] left-[-150px] orb-anim"></div>
+    <div class="orb orb-orange w-[500px] h-[500px] bottom-[-100px] right-[-100px] orb-anim" style="animation-delay:4s"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-24 w-full grid lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Left copy -->
+      <div>
+        <div class="fu1 mb-6 inline-flex items-center gap-2 glass rounded-full px-4 py-2">
+          <span class="w-2 h-2 bg-green-400 rounded-full" style="animation:blink 2s infinite"></span>
+          <span class="mono text-xs text-green-300">Available for new engagements</span>
+        </div>
+
+        <h1 class="fu2 text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] mb-6 tracking-tight">
+          Build infra that<br/><span class="grad">never sleeps.</span>
+        </h1>
+
+        <p class="fu3 text-slate-400 text-lg leading-relaxed max-w-lg mb-8">
+          InfraCorps automates cloud infrastructure, CI/CD pipelines, and compliance — so your engineers ship features, not tickets.
+        </p>
+
+        <div class="fu4 flex flex-wrap gap-3 mb-10">
+          <button class="btn-primary px-7 py-3.5 text-sm" onclick="goPage('services')">
+            <i class="fas fa-layer-group mr-2"></i>Explore Services
+          </button>
+          <button class="btn-ghost px-7 py-3.5 text-sm" onclick="goPage('labs')">
+            <i class="fas fa-flask mr-2"></i>Visit Labs
+          </button>
+        </div>
+
+        <div class="fu5 flex flex-wrap gap-2">
+          <span class="badge badge-blue"><i class="fab fa-aws"></i>AWS</span>
+          <span class="badge badge-gray"><i class="fab fa-docker"></i>Docker</span>
+          <span class="badge badge-blue">Kubernetes</span>
+          <span class="badge badge-gray">Terraform</span>
+          <span class="badge badge-orange">HIPAA</span>
+          <span class="badge badge-gray">GitHub Actions</span>
+        </div>
+      </div>
+
+      <!-- Right terminal -->
+      <div class="fu3 hidden lg:block">
+        <div class="terminal float">
+          <div class="terminal-bar">
+            <div class="terminal-dot" style="background:#ff5f57"></div>
+            <div class="terminal-dot" style="background:#febc2e"></div>
+            <div class="terminal-dot" style="background:#28c840"></div>
+            <span class="mono text-xs text-slate-500 ml-3">infracorps — deploy.sh</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="t-muted">$</span> <span class="t-green">./deploy.sh</span> <span class="t-blue">--env prod --stack helios</span></div>
+            <div class="mt-1 t-muted">▶ Loading Terraform state...</div>
+            <div class="t-green">✓ Plan: 3 to add, 0 to destroy</div>
+            <div class="mt-1 t-muted">▶ Pushing Docker image...</div>
+            <div class="t-blue">  → 720cb3f.dkr.ecr.ap-south-1</div>
+            <div class="t-green">✓ Image pushed (1.2 GB)</div>
+            <div class="mt-1 t-muted">▶ Rolling update to EKS...</div>
+            <div class="t-orange">  ⟳ Pod 1/3 — Terminating</div>
+            <div class="t-orange">  ⟳ Pod 2/3 — Running</div>
+            <div class="t-green">  ✓ Pod 3/3 — Healthy</div>
+            <div class="mt-1 t-green">✓ Deployment complete</div>
+            <div class="mono text-xs mt-1" style="color:#4ade80">  ↳ 0 downtime &nbsp; 8m 24s total</div>
+            <div class="mt-2 t-muted">$ <span class="t-cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- scroll hint -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-slate-600 text-xs mono">
+      <span>scroll</span>
+      <div class="w-px h-10 bg-gradient-to-b from-slate-600 to-transparent"></div>
+    </div>
+  </section>
+
+  <!-- ── STATS ── -->
+  <section class="border-y border-white/5" style="background:var(--navy-card)">
+    <div class="max-w-5xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div class="reveal">
+        <div class="stat-num text-4xl font-extrabold grad mb-1">120+</div>
+        <div class="text-slate-500 text-sm">Deployments shipped</div>
+      </div>
+      <div class="reveal reveal-d1">
+        <div class="stat-num text-4xl font-extrabold grad mb-1">99.9%</div>
+        <div class="text-slate-500 text-sm">Uptime SLA delivered</div>
+      </div>
+      <div class="reveal reveal-d2">
+        <div class="stat-num text-4xl font-extrabold grad mb-1">40%</div>
+        <div class="text-slate-500 text-sm">Avg. cloud cost reduction</div>
+      </div>
+      <div class="reveal reveal-d3">
+        <div class="stat-num text-4xl font-extrabold grad mb-1">15+</div>
+        <div class="text-slate-500 text-sm">Enterprise clients</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SERVICE PREVIEW ── -->
+  <section class="px-6 py-24 max-w-7xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <p class="mono text-xs text-orange-400 tracking-widest uppercase mb-3">// what we do</p>
+      <h2 class="text-4xl md:text-5xl font-extrabold">Core Capabilities</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="card glass p-7 rounded-2xl cursor-pointer reveal reveal-d1" onclick="goPage('services')">
+        <div class="svc-icon-wrap w-12 h-12 bg-blue-500/10 rounded-xl mb-5 text-blue-400 text-xl">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">Cloud Migration</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Zero-downtime lift-and-shift or full cloud-native re-architecture. AWS-first, multi-cloud capable.</p>
+        <div class="mt-5 text-blue-400 text-xs mono">→ details</div>
+      </div>
+      <div class="card p-7 rounded-2xl cursor-pointer reveal reveal-d2" style="background:rgba(249,115,22,.05);border-color:rgba(249,115,22,.2)" onclick="goPage('services')">
+        <div class="svc-icon-wrap w-12 h-12 bg-orange-500/10 rounded-xl mb-5 text-orange-400 text-xl">
+          <i class="fas fa-infinity"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">DevOps Pipelines</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Commit-to-production in minutes via GitHub Actions, Docker, Kubernetes. Rollback gated and observable.</p>
+        <div class="mt-5 text-orange-400 text-xs mono">→ details</div>
+      </div>
+      <div class="card glass p-7 rounded-2xl cursor-pointer reveal reveal-d3" onclick="goPage('services')">
+        <div class="svc-icon-wrap w-12 h-12 bg-blue-500/10 rounded-xl mb-5 text-blue-400 text-xl">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">Security & Compliance</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">HIPAA, SOC2, automated audit trails. Healthcare infrastructure hardened from the ground up.</p>
+        <div class="mt-5 text-blue-400 text-xs mono">→ details</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TICKER ── -->
+  <div class="overflow-hidden py-5 border-y border-white/5">
+    <div class="ticker-track mono text-xs text-slate-600 uppercase tracking-widest">
+      <span class="px-8">AWS EKS</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Kubernetes</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Terraform</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Helm Charts</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">GitHub Actions</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">ArgoCD</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Prometheus</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Grafana</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">HIPAA Compliance</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Ansible</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">AWS EKS</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Kubernetes</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Terraform</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Helm Charts</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">GitHub Actions</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">ArgoCD</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Prometheus</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Grafana</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">HIPAA Compliance</span><span class="px-4 text-slate-800">◆</span>
+      <span class="px-8">Ansible</span><span class="px-4 text-slate-800">◆</span>
+    </div>
+  </div>
+
+  <!-- ── FAQ ── -->
+  <section class="px-6 py-24 max-w-3xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="mono text-xs text-orange-400 tracking-widest uppercase mb-3">// common questions</p>
+      <h2 class="text-4xl font-extrabold">FAQ</h2>
+    </div>
+    <div class="space-y-2" id="faq-list">
+      <!-- items injected by JS -->
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="relative overflow-hidden border-y border-white/5" style="background:var(--navy-card)">
+    <div class="orb orb-blue w-[400px] h-[400px] top-[-100px] right-[10%]"></div>
+    <div class="max-w-3xl mx-auto px-6 py-24 text-center relative z-10 reveal">
+      <p class="mono text-xs text-blue-400 uppercase tracking-widest mb-4">// ready?</p>
+      <h2 class="text-4xl md:text-5xl font-extrabold mb-5">Your infra,<br/>finally under control.</h2>
+      <p class="text-slate-400 mb-8 text-lg">Let's talk about your stack. No sales pitch — just a technical conversation.</p>
+      <button class="btn-primary px-10 py-4 text-sm" onclick="goPage('contact')">Start a Conversation →</button>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+
+<!-- ══════════════════════════════
+  PAGE: SERVICES
+══════════════════════════════ -->
+<div id="page-services" class="page">
+
+  <section class="relative overflow-hidden px-6 pt-28 pb-16 text-center">
+    <div class="orb orb-blue w-[600px] h-[500px] top-[-150px] left-1/2 -translate-x-1/2"></div>
+    <p class="mono text-xs text-orange-400 uppercase tracking-widest mb-4 relative z-10">// services</p>
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-5 relative z-10">What We <span class="grad">Build</span></h1>
+    <p class="text-slate-400 max-w-lg mx-auto relative z-10">Every service we offer exists because we've seen real production systems fail without it.</p>
+  </section>
+
+  <!-- 6 detailed cards -->
+  <section class="px-6 pb-20 max-w-6xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-5">
+
+      <div class="card glass p-8 rounded-2xl reveal">
+        <div class="flex items-start gap-5 mb-5">
+          <div class="w-14 h-14 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-2xl shrink-0"><i class="fas fa-cloud-upload-alt"></i></div>
+          <div>
+            <h3 class="text-xl font-bold mb-1">Cloud Migration</h3>
+            <div class="flex flex-wrap gap-1">
+              <span class="badge badge-blue">AWS</span>
+              <span class="badge badge-gray">Hybrid</span>
+              <span class="badge badge-gray">Multi-cloud</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-slate-400 text-sm leading-relaxed mb-5">Zero-downtime migration using blue-green and canary strategies. We map your full dependency graph, provision with Terraform, and migrate in controlled phases with automated rollback.</p>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Full dependency & traffic mapping</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Terraform IaC provisioning</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Blue-green / canary deployments</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Post-migration cost optimization</li>
+        </ul>
+      </div>
+
+      <div class="card p-8 rounded-2xl reveal reveal-d1" style="background:rgba(249,115,22,.04);border-color:rgba(249,115,22,.18)">
+        <div class="flex items-start gap-5 mb-5">
+          <div class="w-14 h-14 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 text-2xl shrink-0"><i class="fas fa-infinity"></i></div>
+          <div>
+            <h3 class="text-xl font-bold mb-1">DevOps Pipeline</h3>
+            <div class="flex flex-wrap gap-1">
+              <span class="badge badge-orange">GitHub Actions</span>
+              <span class="badge badge-gray">K8s</span>
+              <span class="badge badge-gray">ArgoCD</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-slate-400 text-sm leading-relaxed mb-5">Commit-to-production in under 10 minutes. We design CI/CD systems with built-in testing gates, environment parity, and zero-surprise rollbacks.</p>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li class="flex gap-2"><span class="text-orange-400 mt-0.5">✓</span> GitHub Actions workflow design</li>
+          <li class="flex gap-2"><span class="text-orange-400 mt-0.5">✓</span> Docker + Kubernetes orchestration</li>
+          <li class="flex gap-2"><span class="text-orange-400 mt-0.5">✓</span> GitOps via ArgoCD</li>
+          <li class="flex gap-2"><span class="text-orange-400 mt-0.5">✓</span> Automated QA + approval gates</li>
+        </ul>
+      </div>
+
+      <div class="card glass p-8 rounded-2xl reveal reveal-d1">
+        <div class="flex items-start gap-5 mb-5">
+          <div class="w-14 h-14 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-2xl shrink-0"><i class="fas fa-shield-alt"></i></div>
+          <div>
+            <h3 class="text-xl font-bold mb-1">Security & Compliance</h3>
+            <div class="flex flex-wrap gap-1">
+              <span class="badge badge-orange">HIPAA</span>
+              <span class="badge badge-blue">SOC2</span>
+              <span class="badge badge-gray">Auditing</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-slate-400 text-sm leading-relaxed mb-5">Healthcare-grade AWS hardening through our Helios Project framework. VPC segmentation, KMS encryption, IAM governance, and automated compliance reporting.</p>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> HIPAA / SOC2 readiness</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> IAM & secrets management</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> CloudTrail + automated auditing</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Vulnerability scanning pipelines</li>
+        </ul>
+      </div>
+
+      <div class="card glass p-8 rounded-2xl reveal reveal-d2">
+        <div class="flex items-start gap-5 mb-5">
+          <div class="w-14 h-14 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-2xl shrink-0"><i class="fas fa-chart-line"></i></div>
+          <div>
+            <h3 class="text-xl font-bold mb-1">Monitoring & Observability</h3>
+            <div class="flex flex-wrap gap-1">
+              <span class="badge badge-blue">Prometheus</span>
+              <span class="badge badge-blue">Grafana</span>
+              <span class="badge badge-gray">Loki</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-slate-400 text-sm leading-relaxed mb-5">Full-stack observability: custom SLA dashboards, distributed tracing, log aggregation, and PagerDuty alerting. Know before your users do.</p>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Prometheus + Grafana stacks</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Log aggregation (Loki / ELK)</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Distributed tracing (Jaeger / OTEL)</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> SLA/SLO dashboards + alerting</li>
+        </ul>
+      </div>
+
+      <div class="card glass p-8 rounded-2xl reveal reveal-d2">
+        <div class="flex items-start gap-5 mb-5">
+          <div class="w-14 h-14 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-2xl shrink-0"><i class="fas fa-code-branch"></i></div>
+          <div>
+            <h3 class="text-xl font-bold mb-1">Infrastructure as Code</h3>
+            <div class="flex flex-wrap gap-1">
+              <span class="badge badge-blue">Terraform</span>
+              <span class="badge badge-gray">Ansible</span>
+              <span class="badge badge-gray">Pulumi</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-slate-400 text-sm leading-relaxed mb-5">Reproducible, version-controlled infrastructure. Eliminate configuration drift and one-off provisioning. Every environment is code.</p>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Terraform module design</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Ansible playbook authoring</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Drift detection & state locking</li>
+          <li class="flex gap-2"><span class="text-blue-400 mt-0.5">✓</span> Dev / staging / prod parity</li>
+        </ul>
+      </div>
+
+      <div class="card p-8 rounded-2xl reveal reveal-d3" style="background:rgba(249,115,22,.04);border-color:rgba(249,115,22,.18)">
+        <div class="flex items-start gap-5 mb-5">
+          <div class="w-14 h-14 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 text-2xl shrink-0"><i class="fas fa-dollar-sign"></i></div>
+          <div>
+            <h3 class="text-xl font-bold mb-1">FinOps & Cost Optimization</h3>
+            <div class="flex flex-wrap gap-1">
+              <span class="badge badge-orange">FinOps</span>
+              <span class="badge badge-gray">Auto-scale</span>
+              <span class="badge badge-gray">Reserved</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-slate-400 text-sm leading-relaxed mb-5">40% average cloud cost reduction. We audit, right-size, and design auto-scaling systems that match compute to real demand — not guesswork.</p>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li class="flex gap-2"><span class="text-orange-400 mt-0.5">✓</span> AWS Cost Explorer audits</li>
+          <li class="flex gap-2"><span class="text-orange-400 mt-0.5">✓</span> Right-sizing & Reserved Instances</li>
+          <li class="flex gap-2"><span class="text-orange-400 mt-0.5">✓</span> Auto-scaling policy design</li>
+          <li class="flex gap-2"><span class="text-orange-400 mt-0.5">✓</span> Monthly FinOps reporting</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Proficiency bars -->
+  <section class="border-y border-white/5 px-6 py-20" style="background:var(--navy-card)">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl font-extrabold mb-10 text-center reveal">Technology Depth</h2>
+      <div class="space-y-6 reveal">
+        <div>
+          <div class="flex justify-between text-sm mb-2"><span class="text-slate-300">AWS</span><span class="mono text-blue-400 text-xs">95%</span></div>
+          <div class="h-1.5 rounded-full bg-white/5"><div class="skill-fill bg-gradient-to-r from-blue-600 to-blue-400" style="width:95%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-2"><span class="text-slate-300">Kubernetes & Helm</span><span class="mono text-blue-400 text-xs">90%</span></div>
+          <div class="h-1.5 rounded-full bg-white/5"><div class="skill-fill bg-gradient-to-r from-blue-600 to-blue-400" style="width:90%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-2"><span class="text-slate-300">Terraform / IaC</span><span class="mono text-orange-400 text-xs">93%</span></div>
+          <div class="h-1.5 rounded-full bg-white/5"><div class="skill-fill bg-gradient-to-r from-orange-500 to-orange-400" style="width:93%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-2"><span class="text-slate-300">CI/CD (GitHub Actions)</span><span class="mono text-blue-400 text-xs">96%</span></div>
+          <div class="h-1.5 rounded-full bg-white/5"><div class="skill-fill bg-gradient-to-r from-blue-600 to-blue-400" style="width:96%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-2"><span class="text-slate-300">Security / HIPAA</span><span class="mono text-orange-400 text-xs">88%</span></div>
+          <div class="h-1.5 rounded-full bg-white/5"><div class="skill-fill bg-gradient-to-r from-orange-500 to-orange-400" style="width:88%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-services -->
+
+
+<!-- ══════════════════════════════
+  PAGE: LABS
+══════════════════════════════ -->
+<div id="page-labs" class="page">
+
+  <section class="relative overflow-hidden px-6 pt-28 pb-16 text-center">
+    <div class="orb orb-orange w-[500px] h-[500px] top-[-100px] right-[10%]"></div>
+    <div class="orb orb-blue  w-[400px] h-[400px] bottom-0 left-[5%]"></div>
+    <p class="mono text-xs text-orange-400 uppercase tracking-widest mb-4 relative z-10">// experiments & open source</p>
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-5 relative z-10">InfraCorps <span class="grad">Labs</span></h1>
+    <p class="text-slate-400 max-w-xl mx-auto relative z-10">Where we build in the open. Tools, templates, experiments, and writeups from the work that doesn't fit inside a client engagement.</p>
+  </section>
+
+  <!-- Filter tabs -->
+  <div class="px-6 max-w-6xl mx-auto mb-8">
+    <div class="flex flex-wrap gap-2" id="lab-filters">
+      <button class="lab-filter-btn active mono text-xs px-4 py-2 rounded-full border transition" data-filter="all" onclick="filterLabs('all',this)">All</button>
+      <button class="lab-filter-btn mono text-xs px-4 py-2 rounded-full border border-white/10 text-slate-400 transition" data-filter="tool" onclick="filterLabs('tool',this)">🔧 Tools</button>
+      <button class="lab-filter-btn mono text-xs px-4 py-2 rounded-full border border-white/10 text-slate-400 transition" data-filter="template" onclick="filterLabs('template',this)">📦 Templates</button>
+      <button class="lab-filter-btn mono text-xs px-4 py-2 rounded-full border border-white/10 text-slate-400 transition" data-filter="experiment" onclick="filterLabs('experiment',this)">⚗️ Experiments</button>
+      <button class="lab-filter-btn mono text-xs px-4 py-2 rounded-full border border-white/10 text-slate-400 transition" data-filter="writeup" onclick="filterLabs('writeup',this)">📝 Writeups</button>
+    </div>
+  </div>
+
+  <section class="px-6 pb-24 max-w-6xl mx-auto">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5" id="labs-grid">
+
+      <div class="lab-card card glass rounded-2xl p-6 reveal" data-type="tool">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-lg"><i class="fas fa-terminal"></i></div>
+          <span class="badge badge-blue">Tool</span>
+        </div>
+        <h3 class="font-bold text-base mb-2">terraform-drift-scanner</h3>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">CLI tool that compares live AWS state against Terraform state files and reports drift with severity scoring. Integrates with GitHub Actions.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="badge badge-gray">Python</span>
+            <span class="badge badge-blue">Terraform</span>
+          </div>
+          <a href="#" class="mono text-xs text-blue-400 hover:text-blue-300 transition"><i class="fab fa-github mr-1"></i>GitHub</a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/5 flex gap-4 mono text-xs text-slate-500">
+          <span><i class="fas fa-star mr-1 text-yellow-500/60"></i>247</span>
+          <span><i class="fas fa-code-fork mr-1"></i>38</span>
+          <span class="text-green-400/70">● active</span>
+        </div>
+      </div>
+
+      <div class="lab-card card glass rounded-2xl p-6 reveal reveal-d1" data-type="template">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 text-lg"><i class="fas fa-box-open"></i></div>
+          <span class="badge badge-orange">Template</span>
+        </div>
+        <h3 class="font-bold text-base mb-2">aws-hipaa-baseline</h3>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Terraform starter kit for HIPAA-compliant AWS infrastructure. Includes VPC segmentation, KMS, CloudTrail, and IAM baseline — opinionated and production-tested.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="badge badge-gray">Terraform</span>
+            <span class="badge badge-orange">HIPAA</span>
+          </div>
+          <a href="#" class="mono text-xs text-blue-400 hover:text-blue-300 transition"><i class="fab fa-github mr-1"></i>GitHub</a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/5 flex gap-4 mono text-xs text-slate-500">
+          <span><i class="fas fa-star mr-1 text-yellow-500/60"></i>182</span>
+          <span><i class="fas fa-code-fork mr-1"></i>61</span>
+          <span class="text-green-400/70">● active</span>
+        </div>
+      </div>
+
+      <div class="lab-card card glass rounded-2xl p-6 reveal reveal-d2" data-type="tool">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-lg"><i class="fas fa-coins"></i></div>
+          <span class="badge badge-blue">Tool</span>
+        </div>
+        <h3 class="font-bold text-base mb-2">ec2-right-sizer</h3>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Analyzes 30 days of CloudWatch metrics and recommends right-sized instance types with projected monthly savings. Outputs Terraform patches.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="badge badge-gray">Go</span>
+            <span class="badge badge-blue">AWS SDK</span>
+          </div>
+          <a href="#" class="mono text-xs text-blue-400 hover:text-blue-300 transition"><i class="fab fa-github mr-1"></i>GitHub</a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/5 flex gap-4 mono text-xs text-slate-500">
+          <span><i class="fas fa-star mr-1 text-yellow-500/60"></i>94</span>
+          <span><i class="fas fa-code-fork mr-1"></i>17</span>
+          <span class="text-yellow-400/70">● beta</span>
+        </div>
+      </div>
+
+      <div class="lab-card card glass rounded-2xl p-6 reveal" data-type="experiment">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 text-lg"><i class="fas fa-flask"></i></div>
+          <span class="badge badge-orange">Experiment</span>
+        </div>
+        <h3 class="font-bold text-base mb-2">k8s-chaos-runner</h3>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Lightweight chaos engineering harness for EKS. Injects pod failures, network partitions, and CPU stress with configurable blast radius and auto-recovery assertions.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="badge badge-gray">Go</span>
+            <span class="badge badge-blue">K8s</span>
+          </div>
+          <a href="#" class="mono text-xs text-blue-400 hover:text-blue-300 transition"><i class="fab fa-github mr-1"></i>GitHub</a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/5 flex gap-4 mono text-xs text-slate-500">
+          <span><i class="fas fa-star mr-1 text-yellow-500/60"></i>58</span>
+          <span><i class="fas fa-code-fork mr-1"></i>9</span>
+          <span class="text-orange-400/70">● experimental</span>
+        </div>
+      </div>
+
+      <div class="lab-card card glass rounded-2xl p-6 reveal reveal-d1" data-type="writeup">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-lg"><i class="fas fa-newspaper"></i></div>
+          <span class="badge badge-gray">Writeup</span>
+        </div>
+        <h3 class="font-bold text-base mb-2">Zero-downtime EKS upgrades at scale</h3>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">How we upgraded 3 production EKS clusters from 1.25 to 1.29 without a single dropped request — node group strategy, PodDisruptionBudgets, and timing lessons learned.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="badge badge-blue">EKS</span>
+            <span class="badge badge-gray">12 min read</span>
+          </div>
+          <a href="#" class="mono text-xs text-blue-400 hover:text-blue-300 transition">Read →</a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/5 mono text-xs text-slate-500">
+          Published Jan 2026
+        </div>
+      </div>
+
+      <div class="lab-card card glass rounded-2xl p-6 reveal reveal-d2" data-type="writeup">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 text-lg"><i class="fas fa-newspaper"></i></div>
+          <span class="badge badge-gray">Writeup</span>
+        </div>
+        <h3 class="font-bold text-base mb-2">HIPAA on AWS: what the docs don't tell you</h3>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Practical lessons from 3 HIPAA audits — the gaps between the AWS HIPAA whitepaper and what an actual auditor checks, and how we closed them.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="badge badge-orange">HIPAA</span>
+            <span class="badge badge-gray">18 min read</span>
+          </div>
+          <a href="#" class="mono text-xs text-blue-400 hover:text-blue-300 transition">Read →</a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/5 mono text-xs text-slate-500">
+          Published Nov 2025
+        </div>
+      </div>
+
+      <div class="lab-card card glass rounded-2xl p-6 reveal" data-type="template">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-lg"><i class="fas fa-dharmachakra"></i></div>
+          <span class="badge badge-orange">Template</span>
+        </div>
+        <h3 class="font-bold text-base mb-2">github-actions-ecs-starter</h3>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Production-grade GitHub Actions workflow for ECS Fargate: build, scan, push, deploy with rollback on health check failure. Drop-in for new services.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="badge badge-gray">YAML</span>
+            <span class="badge badge-blue">ECS</span>
+          </div>
+          <a href="#" class="mono text-xs text-blue-400 hover:text-blue-300 transition"><i class="fab fa-github mr-1"></i>GitHub</a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/5 flex gap-4 mono text-xs text-slate-500">
+          <span><i class="fas fa-star mr-1 text-yellow-500/60"></i>311</span>
+          <span><i class="fas fa-code-fork mr-1"></i>84</span>
+          <span class="text-green-400/70">● active</span>
+        </div>
+      </div>
+
+      <div class="lab-card card glass rounded-2xl p-6 reveal reveal-d1" data-type="experiment">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 text-lg"><i class="fas fa-robot"></i></div>
+          <span class="badge badge-orange">Experiment</span>
+        </div>
+        <h3 class="font-bold text-base mb-2">llm-runbook-gen</h3>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">POC: feed a Grafana alert + relevant CloudWatch logs to an LLM and get a first-draft runbook suggestion. Surprisingly useful for novel incidents.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="badge badge-gray">Python</span>
+            <span class="badge badge-orange">LLM</span>
+          </div>
+          <a href="#" class="mono text-xs text-blue-400 hover:text-blue-300 transition"><i class="fab fa-github mr-1"></i>GitHub</a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/5 flex gap-4 mono text-xs text-slate-500">
+          <span><i class="fas fa-star mr-1 text-yellow-500/60"></i>43</span>
+          <span><i class="fas fa-code-fork mr-1"></i>6</span>
+          <span class="text-orange-400/70">● experimental</span>
+        </div>
+      </div>
+
+      <div class="lab-card card glass rounded-2xl p-6 reveal reveal-d2" data-type="writeup">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-lg"><i class="fas fa-newspaper"></i></div>
+          <span class="badge badge-gray">Writeup</span>
+        </div>
+        <h3 class="font-bold text-base mb-2">Why we replaced Helm with pure Kustomize</h3>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">After 3 years of managing complex Helm charts, we migrated a 40-service platform to Kustomize overlays. Was it worth it? Honest assessment with benchmarks.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="badge badge-blue">K8s</span>
+            <span class="badge badge-gray">9 min read</span>
+          </div>
+          <a href="#" class="mono text-xs text-blue-400 hover:text-blue-300 transition">Read →</a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/5 mono text-xs text-slate-500">
+          Published Mar 2026
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- /page-labs -->
+
+
+<!-- ══════════════════════════════
+  PAGE: ABOUT
+══════════════════════════════ -->
+<div id="page-about" class="page">
+
+  <section class="relative overflow-hidden px-6 pt-28 pb-16 text-center">
+    <div class="orb orb-blue w-[500px] h-[500px] top-[-100px] left-1/2 -translate-x-1/2"></div>
+    <p class="mono text-xs text-orange-400 uppercase tracking-widest mb-4 relative z-10">// who we are</p>
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-5 relative z-10">About <span class="grad">InfraCorps</span></h1>
+    <p class="text-slate-400 max-w-xl mx-auto relative z-10">A two-engineer studio obsessed with reliability, automation, and the belief that great DevOps should be invisible.</p>
+  </section>
+
+  <section class="px-6 py-16 max-w-5xl mx-auto reveal">
+    <div class="glass rounded-2xl p-10 md:flex gap-12 items-center">
+      <div class="md:w-1/2 mb-8 md:mb-0">
+        <h2 class="text-3xl font-extrabold mb-4">Our Mission</h2>
+        <p class="text-slate-400 leading-relaxed mb-4">InfraCorps was founded on one conviction: every engineering team deserves infrastructure that simply works — no 3am pages, no surprise cloud bills, no compliance panic.</p>
+        <p class="text-slate-400 leading-relaxed">We work deeply with a small number of clients at a time. Every engagement is a long-term partnership, not a ticket.</p>
+      </div>
+      <div class="md:w-1/2 grid grid-cols-2 gap-3">
+        <div class="glass rounded-xl p-5 text-center"><i class="fas fa-rocket text-blue-400 text-xl mb-3 block"></i><div class="font-semibold text-sm">Ship Fast</div><div class="text-slate-500 text-xs mt-1">Without breaking things</div></div>
+        <div class="glass rounded-xl p-5 text-center"><i class="fas fa-lock text-orange-400 text-xl mb-3 block"></i><div class="font-semibold text-sm">Security First</div><div class="text-slate-500 text-xs mt-1">Built-in, not bolted-on</div></div>
+        <div class="glass rounded-xl p-5 text-center"><i class="fas fa-book text-blue-400 text-xl mb-3 block"></i><div class="font-semibold text-sm">Documentation</div><div class="text-slate-500 text-xs mt-1">Everything handed off</div></div>
+        <div class="glass rounded-xl p-5 text-center"><i class="fas fa-handshake text-orange-400 text-xl mb-3 block"></i><div class="font-semibold text-sm">Partnership</div><div class="text-slate-500 text-xs mt-1">Long-term thinking</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-white/5 px-6 py-20" style="background:var(--navy-card)">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <p class="mono text-xs text-orange-400 uppercase tracking-widest mb-3">// the team</p>
+        <h2 class="text-4xl font-extrabold">Meet the Engineers</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="card glass rounded-2xl p-8 flex flex-col items-center text-center reveal">
+          <div class="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-extrabold mb-5" style="background:linear-gradient(135deg,#3b82f6,#60a5fa);font-family:Syne,sans-serif">KH</div>
+          <h3 class="text-xl font-bold mb-1">Karthik Hegadi</h3>
+          <p class="text-orange-400 text-sm mb-4">Co-Founder · Cloud Architect</p>
+          <p class="text-slate-400 text-sm leading-relaxed mb-5">AWS-specialist focused on large-scale migration and HIPAA-compliant infrastructure. Leads all Helios Project engagements and cloud architecture decisions.</p>
+          <div class="flex gap-3 text-slate-500 text-lg">
+            <i class="fab fa-linkedin hover:text-blue-400 cursor-pointer transition"></i>
+            <i class="fab fa-github hover:text-white cursor-pointer transition"></i>
+            <i class="fab fa-twitter hover:text-blue-400 cursor-pointer transition"></i>
+          </div>
+        </div>
+        <div class="card glass rounded-2xl p-8 flex flex-col items-center text-center reveal reveal-d2">
+          <div class="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-extrabold mb-5" style="background:linear-gradient(135deg,#f97316,#fb923c);font-family:Syne,sans-serif">AB</div>
+          <h3 class="text-xl font-bold mb-1">Aditya Bobade</h3>
+          <p class="text-orange-400 text-sm mb-4">Co-Founder · DevOps Engineer</p>
+          <p class="text-slate-400 text-sm leading-relaxed mb-5">Pipeline specialist with deep expertise in CI/CD automation, Kubernetes operations, and observability. Obsessed with deployment reliability and developer experience.</p>
+          <div class="flex gap-3 text-slate-500 text-lg">
+            <i class="fab fa-linkedin hover:text-blue-400 cursor-pointer transition"></i>
+            <i class="fab fa-github hover:text-white cursor-pointer transition"></i>
+            <i class="fab fa-twitter hover:text-blue-400 cursor-pointer transition"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-about -->
+
+
+<!-- ══════════════════════════════
+  PAGE: CONTACT
+══════════════════════════════ -->
+<div id="page-contact" class="page">
+  <section class="relative overflow-hidden px-6 pt-28 pb-16 text-center">
+    <div class="orb orb-blue w-[500px] h-[400px] top-[-100px] left-1/2 -translate-x-1/2"></div>
+    <p class="mono text-xs text-orange-400 uppercase tracking-widest mb-4 relative z-10">// contact</p>
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-5 relative z-10">Let's <span class="grad">Talk</span></h1>
+    <p class="text-slate-400 max-w-xl mx-auto relative z-10">Tell us about your infrastructure. We'll respond within one business day.</p>
+  </section>
+
+  <section class="px-6 pb-24 max-w-5xl mx-auto">
+    <div class="grid md:grid-cols-5 gap-8">
+      <div class="md:col-span-2 space-y-4">
+        <div class="glass rounded-xl p-6"><div class="text-blue-400 text-xl mb-3"><i class="fas fa-envelope"></i></div><div class="font-semibold mb-1">Email</div><div class="text-slate-400 text-sm">hello@infracorps.io</div></div>
+        <div class="glass rounded-xl p-6"><div class="text-orange-400 text-xl mb-3"><i class="fas fa-map-marker-alt"></i></div><div class="font-semibold mb-1">Location</div><div class="text-slate-400 text-sm">Bengaluru, India · Remote-first</div></div>
+        <div class="glass rounded-xl p-6"><div class="text-blue-400 text-xl mb-3"><i class="fas fa-clock"></i></div><div class="font-semibold mb-1">Response Time</div><div class="text-slate-400 text-sm">Within 1 business day</div></div>
+      </div>
+
+      <div class="md:col-span-3 glass rounded-2xl p-8">
+        <h3 class="text-xl font-bold mb-6">Send a Message</h3>
+        <div id="c-form" class="space-y-4">
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="text-xs text-slate-400 block mb-1.5">First Name</label><input type="text" placeholder="Karthik" class="w-full px-4 py-3 text-sm rounded-xl" /></div>
+            <div><label class="text-xs text-slate-400 block mb-1.5">Last Name</label><input type="text" placeholder="Hegadi" class="w-full px-4 py-3 text-sm rounded-xl" /></div>
+          </div>
+          <div><label class="text-xs text-slate-400 block mb-1.5">Work Email</label><input type="email" placeholder="you@company.io" class="w-full px-4 py-3 text-sm rounded-xl" /></div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1.5">I need help with...</label>
+            <select class="w-full px-4 py-3 text-sm rounded-xl text-slate-300">
+              <option value="">Select a service...</option>
+              <option>Cloud Migration</option>
+              <option>DevOps Pipeline</option>
+              <option>Security & Compliance</option>
+              <option>Monitoring & Observability</option>
+              <option>FinOps & Cost Optimization</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div><label class="text-xs text-slate-400 block mb-1.5">Tell us about your project</label><textarea rows="4" placeholder="Current stack, team size, pain points, timeline..." class="w-full px-4 py-3 text-sm rounded-xl resize-none"></textarea></div>
+          <button onclick="submitContact()" class="btn-primary w-full py-3.5 text-sm">Send Message <i class="fas fa-paper-plane ml-2"></i></button>
+        </div>
+        <div id="c-success" class="hidden text-center py-12">
+          <div class="w-16 h-16 bg-green-500/15 rounded-full flex items-center justify-center mx-auto mb-5"><i class="fas fa-check text-green-400 text-2xl"></i></div>
+          <h4 class="text-xl font-bold mb-2">Message sent!</h4>
+          <p class="text-slate-400 text-sm">We'll get back to you within one business day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-contact -->
+
+
+<!-- ══════════════════════════════
+  FOOTER
+══════════════════════════════ -->
+<footer class="border-t border-white/5 px-6 py-14" style="background:var(--navy-card)">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid md:grid-cols-4 gap-8 mb-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-4 cursor-pointer" onclick="goPage('home')">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs" style="background:linear-gradient(135deg,#3b82f6,#f97316);font-family:Syne,sans-serif">IC</div>
+          <span style="font-family:Syne,sans-serif;font-weight:800">INFRA<span style="color:#f97316">CORPS</span></span>
+        </div>
+        <p class="text-slate-500 text-sm leading-relaxed max-w-xs mb-4">Elite DevOps and cloud infrastructure — for teams that can't afford to be slow or unsafe.</p>
+        <div class="flex gap-4 text-slate-600 text-lg">
+          <i class="fab fa-linkedin hover:text-blue-400 cursor-pointer transition"></i>
+          <i class="fab fa-github hover:text-white cursor-pointer transition"></i>
+          <i class="fab fa-twitter hover:text-blue-400 cursor-pointer transition"></i>
+        </div>
+      </div>
+      <div>
+        <div class="mono text-xs text-slate-500 uppercase tracking-widest mb-4">Navigation</div>
+        <div class="space-y-2 text-sm text-slate-400">
+          <div class="hover:text-white cursor-pointer transition" onclick="goPage('home')">Home</div>
+          <div class="hover:text-white cursor-pointer transition" onclick="goPage('services')">Services</div>
+          <div class="hover:text-white cursor-pointer transition" onclick="goPage('labs')">Labs</div>
+          <div class="hover:text-white cursor-pointer transition" onclick="goPage('about')">About</div>
+          <div class="hover:text-white cursor-pointer transition" onclick="goPage('contact')">Contact</div>
+        </div>
+      </div>
+      <div>
+        <div class="mono text-xs text-slate-500 uppercase tracking-widest mb-4">Stack</div>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="badge badge-gray"><i class="fab fa-aws mr-1 text-orange-400"></i>AWS</span>
+          <span class="badge badge-gray"><i class="fab fa-docker mr-1 text-blue-400"></i>Docker</span>
+          <span class="badge badge-gray">Kubernetes</span>
+          <span class="badge badge-gray">Terraform</span>
+          <span class="badge badge-gray">Grafana</span>
+          <span class="badge badge-gray">ArgoCD</span>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between mono text-xs text-slate-600 gap-2">
+      <span>© 2026 InfraCorps. Built by Karthik Hegadi & Aditya Bobade.</span>
+      <span>Bengaluru, India · Remote-first</span>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════
+  JS
+══════════════════════════════ -->
+<script>
+/* ── FAQ DATA ── */
+const faqs = [
+  { q: "What industries do you serve?", a: "We specialize in healthcare (HIPAA-compliant), fintech, SaaS, and enterprise software. Our Helios Project targets mid-to-large healthcare organizations needing AWS-native, regulation-ready infrastructure." },
+  { q: "How long does a typical cloud migration take?", a: "Small-to-mid environments migrate in 4–8 weeks. Large enterprise migrations with compliance requirements take 3–6 months. We start with a discovery phase to give you an accurate timeline upfront." },
+  { q: "Do you provide ongoing support after delivery?", a: "Yes. We offer retainer-based DevOps-as-a-Service plans including 24/7 monitoring, incident response, monthly infrastructure reviews, and cost optimization audits." },
+  { q: "Can you work alongside our existing engineering team?", a: "Absolutely. We embed as a specialized extension of your team — not a replacement. Knowledge transfer and documentation are core to every engagement." },
+  { q: "What's your pricing model?", a: "Project-based for migrations and pipeline builds; monthly retainers for ongoing DaaS. We scope precisely before committing so there are no surprises on either side." },
+];
+
+function buildFAQ() {
+  const list = document.getElementById('faq-list');
+  list.innerHTML = faqs.map((f,i) => `
+    <div class="glass rounded-xl overflow-hidden">
+      <button class="w-full px-6 py-5 flex items-center justify-between text-left font-semibold text-sm faq-trigger" onclick="toggleFAQ(this)">
+        <span>${f.q}</span>
+        <i class="fas fa-chevron-down faq-chevron text-slate-500 text-xs shrink-0 ml-4"></i>
+      </button>
+      <div class="faq-body px-6 text-slate-400 text-sm leading-relaxed">
+        <div class="pb-5">${f.a}</div>
+      </div>
+    </div>
+  `).join('');
+}
+buildFAQ();
+
+function toggleFAQ(btn) {
+  const wrap = btn.closest('.glass');
+  const body = wrap.querySelector('.faq-body');
+  const chevron = wrap.querySelector('.faq-chevron');
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.faq-body.open').forEach(b => {
+    b.classList.remove('open');
+    b.closest('.glass').querySelector('.faq-chevron').style.transform = '';
+  });
+  if (!isOpen) {
+    body.classList.add('open');
+    chevron.style.transform = 'rotate(180deg)';
+  }
+}
+
+/* ── PAGE NAV ── */
+function goPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.toggle('active-link', l.dataset.page === id);
+  });
+  window.scrollTo({ top:0, behavior:'smooth' });
+  initReveal();
+}
+
+/* ── MOBILE MENU ── */
+let mobOpen = false;
+function toggleMob() {
+  mobOpen = !mobOpen;
+  document.getElementById('mob-menu').classList.toggle('open', mobOpen);
+  const [s1,s2,s3] = ['hb1','hb2','hb3'].map(id => document.getElementById(id));
+  if (mobOpen) {
+    s1.style.transform = 'rotate(45deg) translate(5px,5px)';
+    s2.style.opacity = '0';
+    s3.style.transform = 'rotate(-45deg) translate(5px,-5px)';
+  } else {
+    s1.style.transform = s3.style.transform = '';
+    s2.style.opacity = '1';
+  }
+}
+
+/* ── SCROLL ── */
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('scroll-bar').style.width = pct + '%';
+  document.getElementById('btt').classList.toggle('show', h.scrollTop > 400);
+  document.getElementById('main-nav').classList.toggle('scrolled', h.scrollTop > 20);
+});
+
+/* ── INTERSECTION OBSERVER ── */
+function initReveal() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => { el.classList.remove('visible'); obs.observe(el); });
+}
+initReveal();
+
+/* ── LABS FILTER ── */
+function filterLabs(type, btn) {
+  document.querySelectorAll('.lab-filter-btn').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = '';
+    b.style.borderColor = '';
+    b.style.color = '';
+    b.classList.add('border-white/10','text-slate-400');
+  });
+  btn.classList.add('active');
+  btn.classList.remove('border-white/10','text-slate-400');
+  btn.style.background = 'rgba(59,130,246,.12)';
+  btn.style.borderColor = 'rgba(59,130,246,.3)';
+  btn.style.color = '#60a5fa';
+
+  document.querySelectorAll('#labs-grid > div').forEach(card => {
+    const show = type === 'all' || card.dataset.type === type;
+    card.style.display = show ? '' : 'none';
+  });
+}
+// Init active filter style
+const firstFilter = document.querySelector('.lab-filter-btn');
+if (firstFilter) {
+  firstFilter.style.background = 'rgba(59,130,246,.12)';
+  firstFilter.style.borderColor = 'rgba(59,130,246,.3)';
+  firstFilter.style.color = '#60a5fa';
+}
+
+/* ── CONTACT ── */
+function submitContact() {
+  document.getElementById('c-form').classList.add('hidden');
+  document.getElementById('c-success').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
